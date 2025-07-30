@@ -4,7 +4,7 @@ import json
 import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field # Field eklendi
+from pydantic import BaseModel
 from typing import List
 from datetime import datetime
 
@@ -15,8 +15,7 @@ class Message(BaseModel):
     receiver_id: int
     subject: str
     content: str
-    # DÜZELTME: Her yeni mesaj için o anki zamanı üretecek şekilde güncellendi
-    timestamp: str = Field(default_factory=lambda: datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    timestamp: str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 class User(BaseModel):
     id: int
@@ -62,12 +61,13 @@ def get_users():
 
 @app.post("/messages")
 def send_message(msg: Message):
-    # DÜZELTME: try...finally bloğu ile kaynak sızıntısı engellendi
     if msg.sender_id not in user_map or msg.receiver_id not in user_map:
         raise HTTPException(status_code=404, detail="Gönderici veya alıcı bulunamadı.")
 
     receiver_queue_name = f"user_queue_{msg.receiver_id}"
-    connection = None  # Bağlantıyı try bloğunun dışında tanımla
+    
+    # DÜZELTME: Bağlantı değişkenini try bloğunun dışında tanımlıyoruz.
+    connection = None
     try:
         connection = pika.BlockingConnection(url_params)
         channel = connection.channel()
@@ -83,20 +83,22 @@ def send_message(msg: Message):
         print(f"Mesaj gönderilirken hata: {e}")
         raise HTTPException(status_code=500, detail="Mesaj gönderilemedi.")
     finally:
-        # Hata olsa da olmasa da bu blok çalışır ve bağlantıyı kapatır
+        # DÜZELTME: 'finally' bloğu, hata olsa da olmasa da her zaman çalışır.
+        # Bu, bağlantının asla açık kalmamasını garanti eder.
         if connection and connection.is_open:
             connection.close()
 
 
 @app.get("/messages/check/{user_id}")
 def check_for_messages(user_id: int):
-    # DÜZELTME: try...finally bloğu ile kaynak sızıntısı engellendi
     if user_id not in user_map:
         raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı.")
 
     user_queue_name = f"user_queue_{user_id}"
     messages_to_return = []
-    connection = None # Bağlantıyı try bloğunun dışında tanımla
+    
+    # DÜZELTME: Bağlantı değişkenini try bloğunun dışında tanımlıyoruz.
+    connection = None
     try:
         connection = pika.BlockingConnection(url_params)
         channel = connection.channel()
@@ -106,7 +108,7 @@ def check_for_messages(user_id: int):
             method_frame, properties, body = channel.basic_get(queue=user_queue_name, auto_ack=False)
             if method_frame is None:
                 break
-
+            
             channel.basic_ack(delivery_tag=method_frame.delivery_tag)
             message_data = json.loads(body)
             sender_info = user_map.get(message_data.get("sender_id"))
@@ -119,6 +121,6 @@ def check_for_messages(user_id: int):
         print(f"Mesaj kontrol edilirken hata: {e}")
         raise HTTPException(status_code=500, detail="Mesajlar kontrol edilemedi.")
     finally:
-        # Hata olsa da olmasa da bu blok çalışır ve bağlantıyı kapatır
+        # DÜZELTME: 'finally' bloğu ile bağlantının her durumda kapatılmasını sağlıyoruz.
         if connection and connection.is_open:
             connection.close()
