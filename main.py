@@ -37,7 +37,6 @@ app.add_middleware(
 
 # --- RabbitMQ Ayarları ---
 RABBITMQ_URL = os.environ.get('CLOUDAMQP_URL', 'amqp://guest:guest@localhost:5672')
-# Pika'nın bu URL'i kullanarak bağlantı kurmasını sağlıyoruz.
 url_params = pika.URLParameters(RABBITMQ_URL)
 
 # --- Başlangıç Verisi ---
@@ -62,23 +61,15 @@ def get_users():
 
 @app.post("/messages")
 def send_message(msg: Message):
-    """
-    Gelen mesajı, alıcının kişisel kuyruğuna gönderir.
-    """
     if msg.sender_id not in user_map or msg.receiver_id not in user_map:
         raise HTTPException(status_code=404, detail="Gönderici veya alıcı bulunamadı.")
 
-    # Her kullanıcı için özel bir kuyruk adı oluşturuyoruz. Örn: 'user_queue_2'
     receiver_queue_name = f"user_queue_{msg.receiver_id}"
 
     try:
         connection = pika.BlockingConnection(url_params)
         channel = connection.channel()
-
-        # Alıcının kişisel kuyruğunu oluştur/kontrol et.
         channel.queue_declare(queue=receiver_queue_name, durable=True)
-
-        # Mesajı bu kişisel kuyruğa gönder.
         channel.basic_publish(
             exchange='',
             routing_key=receiver_queue_name,
@@ -93,46 +84,45 @@ def send_message(msg: Message):
 
 
 @app.get("/messages/check/{user_id}")
-def check_for_message(user_id: int):
+def check_for_messages(user_id: int): # Fonksiyon adı güncellendi
     """
-    Belirtilen kullanıcının kişisel kuyruğundan SADECE BİR mesaj çekmeyi dener.
-    Bu, polling için verimli bir yöntemdir.
+    Belirtilen kullanıcının kişisel kuyruğundaki TÜM mesajları çekip döndürür.
+    Bu, polling için çok daha verimli bir yöntemdir.
     """
     if user_id not in user_map:
         raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı.")
 
     user_queue_name = f"user_queue_{user_id}"
+    messages_to_return = []
 
     try:
         connection = pika.BlockingConnection(url_params)
         channel = connection.channel()
         channel.queue_declare(queue=user_queue_name, durable=True)
 
-        # Kuyruktan bir mesaj çekmeye çalışır (beklemeden).
-        method_frame, properties, body = channel.basic_get(queue=user_queue_name)
+        # Kuyrukta mesaj kalmayana kadar hepsini çek
+        while True:
+            # auto_ack=False, mesajı bizim onayımızla sileceğimizi belirtir
+            method_frame, properties, body = channel.basic_get(queue=user_queue_name, auto_ack=False)
+            
+            # Kuyrukta başka mesaj yoksa döngüden çık
+            if method_frame is None:
+                break
 
-        connection.close()
-
-        # Eğer bir mesaj alındıysa...
-        if method_frame:
-            # Mesajı işlediğimizi ve kuyruktan silebileceğini bildiririz.
-            # Bu işlemi yeni bir bağlantı açarak yapmak zorundayız, çünkü önceki kapandı.
-            # Bu, basic_get'in bir sınırlamasıdır.
-            conn_ack = pika.BlockingConnection(url_params)
-            ch_ack = conn_ack.channel()
-            ch_ack.basic_ack(delivery_tag=method_frame.delivery_tag)
-            conn_ack.close()
+            # Mesajı işlediğimizi ve kuyruktan silebileceğini hemen bildiriyoruz.
+            channel.basic_ack(delivery_tag=method_frame.delivery_tag)
 
             message_data = json.loads(body)
-            # Gönderen adını mesaja ekleyelim
             sender_info = user_map.get(message_data.get("sender_id"))
             if sender_info:
                 message_data["sender_name"] = sender_info.get("name")
+            
+            messages_to_return.append(message_data)
 
-            return {"status": "ok", "message": message_data}
-        else:
-            # Kuyruk boşsa, mesaj olmadığını bildiririz.
-            return {"status": "no_message", "message": None}
+        connection.close()
+        
+        # Dönen veri yapısı güncellendi: 'messages' adında bir liste içeriyor
+        return {"status": "ok", "messages": messages_to_return}
 
     except Exception as e:
         print(f"Mesaj kontrol edilirken hata: {e}")

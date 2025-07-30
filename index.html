@@ -109,7 +109,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- AYARLAR ---
-            const API_URL = 'https://stajwithrabbit.onrender.com'; // KENDİ RENDER URL'İNİ BURAYA YAPIŞTIR!
+            const API_URL = 'https://rabbitmq-rj2n.onrender.com'; // KENDİ RENDER URL'İNİ BURAYA YAPIŞTIR!
             const POLLING_INTERVAL_MS = 3000; // 3 saniyede bir yeni mesajları kontrol et
 
             // --- Elementleri Seçme ---
@@ -208,9 +208,11 @@
 
                     const data = await response.json();
 
-                    if (data.status === 'ok' && data.message) {
-                        displayMessageInList(data.message);
-                        setTimeout(checkForMessages, 100); // Bir mesaj daha olabilir, hemen tekrar kontrol et
+                    if (data.status === 'ok' && data.messages && data.messages.length > 0) {
+                        console.log(`${data.messages.length} adet yeni mesaj alındı.`);
+                        data.messages.forEach(message => {
+                            displayMessageInList(message);
+                        });
                     } else {
                         pollingStatus.innerHTML = `<span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span> Güncel`;
                     }
