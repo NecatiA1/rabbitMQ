@@ -9,23 +9,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Ekranın tamamını kaplaması ve kaydırma çubuklarının doğru çalışması için */
         html, body {
             height: 100%;
             overflow: hidden;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
-        /* Panellerin kendi içinde kaydırılabilir olması için */
         .scrollable {
             overflow-y: auto;
             height: 100vh;
         }
-        /* Seçili mesajın arka plan rengini ve sol kenarlığını belirlemek için */
         .selected-message {
             background-color: #eef2ff; /* indigo-50 */
             border-left-color: #4f46e5 !important; /* indigo-600 */
         }
-        /* Webkit tabanlı tarayıcılar için daha ince ve estetik scrollbar */
         .scrollable::-webkit-scrollbar {
             width: 6px;
         }
@@ -37,13 +33,19 @@
             border-radius: 20px;
             border: 3px solid transparent;
         }
-        /* YENİ: Toast Bildirim Stili */
         #toast {
             opacity: 0;
-            transition: opacity 0.3s ease-in-out;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            transform: translateY(20px);
         }
         #toast.show {
             opacity: 1;
+            transform: translateY(0);
+        }
+        /* Buton devre dışı bırakıldığında görünümü */
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -92,9 +94,10 @@
                     </div>
                     <textarea id="compose-body" rows="4" placeholder="Mesajınızı buraya yazın..." class="w-full p-2 border border-slate-300 rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required></textarea>
                     <div class="flex justify-end">
-                        <button type="submit" class="inline-flex items-center px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
-                            Gönder
-                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
+                        <!-- DÜZELTME: Butona ID eklendi ve içindeki elementlerin tıklamayı engellemesi önlendi -->
+                        <button type="submit" id="send-btn" class="inline-flex items-center justify-center px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+                            <span class="pointer-events-none">Gönder</span>
+                            <svg class="w-5 h-5 ml-2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
                         </button>
                     </div>
                 </form>
@@ -102,47 +105,36 @@
         </main>
     </div>
 
-    <!-- YENİ: Toast Bildirim Elementi -->
     <div id="toast" class="fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg"></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- AYARLAR ---
-            const API_URL = 'https://rabbitmq-rj2n.onrender.com'; // KENDİ RENDER URL'İNİ BURAYA YAPIŞTIR!
+            const API_URL = 'https://rabbitmq-rj2n.onrender.com';
             const POLLING_INTERVAL_MS = 3000;
 
-            // --- Elementleri Seçme ---
             const userSelect = document.getElementById('user-select');
             const messageList = document.getElementById('message-list');
             const messageView = document.getElementById('message-view');
             const composeForm = document.getElementById('compose-form');
             const composeTo = document.getElementById('compose-to');
             const pollingStatus = document.getElementById('polling-status');
+            const sendBtn = document.getElementById('send-btn'); // DÜZELTME: Buton elementi seçildi
 
-            // --- Durum Değişkenleri ---
             let allUsers = [];
             let currentUser = null;
             let pollingIntervalId = null;
 
-            // --- FONKSİYONLAR ---
-
-            // YENİ: Engel olmayan bildirim (toast) gösterme fonksiyonu
             function showToast(message, isError = false) {
                 const toast = document.getElementById('toast');
                 toast.textContent = message;
-                // Renk sınıflarını sıfırla ve yenilerini ekle
                 toast.className = 'fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg';
                 toast.classList.add(isError ? 'bg-red-500' : 'bg-green-500');
-                
-                toast.classList.add('show'); // Görünür yap
-
-                // 3 saniye sonra bildirimi gizle
+                toast.classList.add('show');
                 setTimeout(() => {
                     toast.classList.remove('show');
                 }, 3000);
             }
 
-            // 1. Tüm kullanıcıları API'den çek ve seçim kutularını doldur
             async function populateUsers() {
                 try {
                     const response = await fetch(`${API_URL}/users`);
@@ -151,7 +143,6 @@
                          throw new Error(`API Hatası ${response.status}: ${errorText}`);
                     }
                     allUsers = await response.json();
-
                     userSelect.innerHTML = '';
                     composeTo.innerHTML = '<option value="" disabled selected>Alıcı Seçin...</option>';
                     allUsers.forEach(user => {
@@ -159,7 +150,6 @@
                         userSelect.appendChild(option.cloneNode(true));
                         composeTo.appendChild(option);
                     });
-                    
                     if(allUsers.length > 0) {
                         handleUserLogin(allUsers[0].id);
                     }
@@ -169,7 +159,6 @@
                 }
             }
 
-            // 2. Kullanıcı giriş yaptığında veya değiştirdiğinde çalışacak ana fonksiyon
             function handleUserLogin(userId) {
                 const selectedUserId = parseInt(userId);
                 currentUser = allUsers.find(u => u.id === selectedUserId);
@@ -181,14 +170,12 @@
                 startPolling();
             }
 
-            // 3. Otomatik mesaj kontrolünü (Polling) başlatan fonksiyon
             function startPolling() {
                 if (pollingIntervalId) clearInterval(pollingIntervalId);
                 checkForMessages();
                 pollingIntervalId = setInterval(checkForMessages, POLLING_INTERVAL_MS);
             }
 
-            // 4. Yeni mesajları kontrol etmek için sunucuya istek atan fonksiyon
             async function checkForMessages() {
                 if (!currentUser) return;
                 pollingStatus.innerHTML = `<svg class="w-4 h-4 text-slate-400 animate-spin mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor" fill-rule="evenodd" opacity="0.2"></path><path d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z" fill="currentColor"></path></svg> Kontrol ediliyor...`;
@@ -196,7 +183,6 @@
                     const response = await fetch(`${API_URL}/messages/check/${currentUser.id}`);
                     if (!response.ok) throw new Error('Mesaj kontrol hatası');
                     const data = await response.json();
-                    
                     if (data.status === 'ok' && data.messages && data.messages.length > 0) {
                         data.messages.forEach(message => displayMessageInList(message));
                     }
@@ -207,11 +193,9 @@
                 }
             }
 
-            // 5. Gelen mesajı sol taraftaki listeye ekler
             function displayMessageInList(msg) {
                 const emptyMsgDiv = messageList.querySelector('div.text-center');
                 if (emptyMsgDiv) emptyMsgDiv.remove();
-
                 const div = document.createElement('div');
                 div.className = 'p-3 rounded-lg cursor-pointer hover:bg-indigo-50 border-b border-slate-200 border-l-4 border-transparent transition-colors duration-200';
                 div.innerHTML = `
@@ -227,7 +211,6 @@
                 messageList.prepend(div);
             }
             
-            // 6. Seçilen mesajın içeriğini sağ panelde gösterir
             function displayMessageContent(msg) {
                 messageView.innerHTML = `
                     <div class="border-b border-slate-200 pb-4">
@@ -241,7 +224,7 @@
                 `;
             }
 
-            // 7. Yeni mesaj gönderme
+            // DÜZELTME: Butonun devre dışı bırakılmasını ve geri bildirimini yöneten fonksiyon
             async function sendMessage(event) {
                 event.preventDefault();
                 
@@ -256,6 +239,10 @@
                     showToast('Lütfen bir alıcı seçin.', true);
                     return;
                 }
+
+                // Butonu devre dışı bırak ve metni değiştir
+                sendBtn.disabled = true;
+                sendBtn.querySelector('span').textContent = 'Gönderiliyor...';
 
                 try {
                     const response = await fetch(`${API_URL}/messages`, {
@@ -274,18 +261,19 @@
                 } catch (error) {
                     console.error('Mesaj gönderilirken hata:', error);
                     showToast(`Mesaj gönderilemedi: ${error.message}`, true);
+                } finally {
+                    // İşlem bitince (hata olsa da olmasa da) butonu eski haline getir
+                    sendBtn.disabled = false;
+                    sendBtn.querySelector('span').textContent = 'Gönder';
                 }
             }
 
-
-            // --- OLAY DİNLEYİCİLERİ ---
             userSelect.addEventListener('change', (e) => {
                 handleUserLogin(e.target.value);
             });
 
             composeForm.addEventListener('submit', sendMessage);
 
-            // --- BAŞLANGIÇ ---
             populateUsers();
         });
     </script>
