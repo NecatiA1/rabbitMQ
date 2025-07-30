@@ -19,20 +19,12 @@
             height: 100vh;
         }
         .selected-message {
-            background-color: #eef2ff; /* indigo-50 */
-            border-left-color: #4f46e5 !important; /* indigo-600 */
+            background-color: #eef2ff;
+            border-left-color: #4f46e5 !important;
         }
-        .scrollable::-webkit-scrollbar {
-            width: 6px;
-        }
-        .scrollable::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .scrollable::-webkit-scrollbar-thumb {
-            background-color: #d1d5db; /* gray-400 */
-            border-radius: 20px;
-            border: 3px solid transparent;
-        }
+        .scrollable::-webkit-scrollbar { width: 6px; }
+        .scrollable::-webkit-scrollbar-track { background: transparent; }
+        .scrollable::-webkit-scrollbar-thumb { background-color: #d1d5db; border-radius: 20px; border: 3px solid transparent; }
         #toast {
             opacity: 0;
             transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
@@ -42,15 +34,52 @@
             opacity: 1;
             transform: translateY(0);
         }
-        /* Buton devre dışı bırakıldığında görünümü */
-        button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
+        button:disabled { opacity: 0.7; cursor: not-allowed; }
+        .hidden { display: none; }
     </style>
 </head>
 <body class="bg-slate-100">
-    <div id="app" class="flex h-screen">
+    <!-- YENİ: Giriş/Kayıt Ekranı -->
+    <div id="auth-container" class="flex items-center justify-center w-full h-full">
+        <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+            <div>
+                <h2 class="mt-6 text-3xl font-bold text-center text-gray-900">Hesabınıza Giriş Yapın</h2>
+            </div>
+            <!-- Giriş Formu -->
+            <form id="login-form" class="mt-8 space-y-6">
+                <div>
+                    <label for="login-email" class="sr-only">E-posta Adresi</label>
+                    <input id="login-email" name="email" type="email" autocomplete="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="E-posta Adresi">
+                </div>
+                <div>
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Giriş Yap</button>
+                </div>
+            </form>
+            <div class="text-center text-sm text-gray-600">
+                Hesabınız yok mu? <a href="#" id="show-register-link" class="font-medium text-indigo-600 hover:text-indigo-500">Kayıt Olun</a>
+            </div>
+            <!-- Kayıt Formu (Gizli) -->
+            <form id="register-form" class="hidden mt-8 space-y-6">
+                 <div>
+                    <label for="register-name" class="sr-only">Ad Soyad</label>
+                    <input id="register-name" name="name" type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Ad Soyad">
+                </div>
+                <div>
+                    <label for="register-email" class="sr-only">E-posta Adresi</label>
+                    <input id="register-email" name="email" type="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="E-posta Adresi">
+                </div>
+                <div>
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Kayıt Ol</button>
+                </div>
+                 <div class="text-center text-sm text-gray-600">
+                    Zaten hesabınız var mı? <a href="#" id="show-login-link" class="font-medium text-indigo-600 hover:text-indigo-500">Giriş Yapın</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ana Mail Uygulaması (Gizli) -->
+    <div id="app" class="hidden flex h-screen">
         <aside class="w-1/3 bg-white border-r border-slate-200 flex flex-col scrollable">
             <header class="p-4 border-b border-slate-200 sticky top-0 bg-white z-10">
                 <div class="flex items-center space-x-3">
@@ -59,24 +88,17 @@
                     </div>
                     <h1 class="text-xl font-bold text-slate-800">Ödeal Mail</h1>
                 </div>
-                <div class="mt-4">
-                    <label for="user-select" class="text-sm font-medium text-slate-600">Giriş Yapan Kullanıcı:</label>
-                    <select id="user-select" class="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                        </select>
-                </div>
+                <!-- YENİ: Kullanıcı bilgisi ve çıkış butonu -->
+                <div id="user-info" class="mt-4"></div>
             </header>
-
             <div id="inbox" class="flex-grow p-2">
                 <div class="flex justify-between items-center mb-2 p-2">
                     <h2 class="text-lg font-semibold text-slate-700">Gelen Kutusu</h2>
-                    <div id="polling-status" class="flex items-center text-sm text-slate-500 italic">
-                        </div>
+                    <div id="polling-status" class="flex items-center text-sm text-slate-500 italic"></div>
                 </div>
-                <div id="message-list" class="space-y-1">
-                    </div>
+                <div id="message-list" class="space-y-1"></div>
             </div>
         </aside>
-
         <main class="w-2/3 flex flex-col bg-slate-50 scrollable">
             <div id="message-view" class="p-6 md:p-8 flex-grow">
                 <div class="flex flex-col items-center justify-center h-full text-center text-slate-500">
@@ -84,17 +106,14 @@
                     <p>Okumak için bir mesaj seçin.</p>
                 </div>
             </div>
-            
             <div id="compose-view" class="p-4 bg-white border-t border-slate-200 sticky bottom-0">
                 <form id="compose-form">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
-                        <select id="compose-to" class="w-full p-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
-                            </select>
+                        <select id="compose-to" class="w-full p-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required></select>
                         <input type="text" id="compose-subject" placeholder="Konu" class="w-full p-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                     </div>
                     <textarea id="compose-body" rows="4" placeholder="Mesajınızı buraya yazın..." class="w-full p-2 border border-slate-300 rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required></textarea>
                     <div class="flex justify-end">
-                        <!-- DÜZELTME: Butona ID eklendi ve içindeki elementlerin tıklamayı engellemesi önlendi -->
                         <button type="submit" id="send-btn" class="inline-flex items-center justify-center px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
                             <span class="pointer-events-none">Gönder</span>
                             <svg class="w-5 h-5 ml-2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
@@ -104,7 +123,6 @@
             </div>
         </main>
     </div>
-
     <div id="toast" class="fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg"></div>
 
     <script>
@@ -112,13 +130,19 @@
             const API_URL = 'https://rabbitmq-rj2n.onrender.com';
             const POLLING_INTERVAL_MS = 3000;
 
-            const userSelect = document.getElementById('user-select');
+            const authContainer = document.getElementById('auth-container');
+            const appContainer = document.getElementById('app');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const showRegisterLink = document.getElementById('show-register-link');
+            const showLoginLink = document.getElementById('show-login-link');
+            const userInfo = document.getElementById('user-info');
             const messageList = document.getElementById('message-list');
             const messageView = document.getElementById('message-view');
             const composeForm = document.getElementById('compose-form');
             const composeTo = document.getElementById('compose-to');
             const pollingStatus = document.getElementById('polling-status');
-            const sendBtn = document.getElementById('send-btn'); // DÜZELTME: Buton elementi seçildi
+            const sendBtn = document.getElementById('send-btn');
 
             let allUsers = [];
             let currentUser = null;
@@ -130,55 +154,53 @@
                 toast.className = 'fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg';
                 toast.classList.add(isError ? 'bg-red-500' : 'bg-green-500');
                 toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 3000);
+                setTimeout(() => { toast.classList.remove('show'); }, 3000);
             }
 
-            async function populateUsers() {
-                try {
-                    const response = await fetch(`${API_URL}/users`);
-                    if (!response.ok) {
-                         const errorText = await response.text();
-                         throw new Error(`API Hatası ${response.status}: ${errorText}`);
-                    }
-                    allUsers = await response.json();
-                    userSelect.innerHTML = '';
-                    composeTo.innerHTML = '<option value="" disabled selected>Alıcı Seçin...</option>';
-                    allUsers.forEach(user => {
-                        const option = new Option(user.name, user.id);
-                        userSelect.appendChild(option.cloneNode(true));
-                        composeTo.appendChild(option);
-                    });
-                    if(allUsers.length > 0) {
-                        handleUserLogin(allUsers[0].id);
-                    }
-                } catch (error) {
-                    console.error('Kullanıcılar çekilirken hata:', error);
-                    showToast('API sunucusuna bağlanılamadı.', true);
-                }
-            }
+            async function startApplication(user) {
+                currentUser = user;
+                authContainer.classList.add('hidden');
+                appContainer.classList.remove('hidden');
 
-            function handleUserLogin(userId) {
-                const selectedUserId = parseInt(userId);
-                currentUser = allUsers.find(u => u.id === selectedUserId);
-                if (!currentUser) return;
-                console.log(`Kullanıcı değişti: ${currentUser.name} (ID: ${currentUser.id})`);
-                messageList.innerHTML = '<div class="text-center text-slate-500 p-4">Mesajlar yükleniyor...</div>';
-                messageView.innerHTML = '<div class="flex flex-col items-center justify-center h-full text-center text-slate-500"><svg class="w-16 h-16 text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 5.523-4.477 10-10 10S1 17.523 1 12 5.477 2 11 2s10 4.477 10 10z"></path></svg><p>Okumak için bir mesaj seçin.</p></div>';
-                userSelect.value = currentUser.id;
+                userInfo.innerHTML = `
+                    <p class="text-sm font-medium text-slate-600">Giriş Yapan: <span class="font-bold text-slate-800">${currentUser.name}</span></p>
+                    <button id="logout-btn" class="text-xs text-indigo-600 hover:underline">Çıkış Yap</button>
+                `;
+                document.getElementById('logout-btn').addEventListener('click', () => location.reload());
+
+                await populateRecipients();
                 startPolling();
             }
 
+            async function populateRecipients() {
+                try {
+                    const response = await fetch(`${API_URL}/users`);
+                    if (!response.ok) throw new Error('Alıcılar yüklenemedi');
+                    allUsers = await response.json();
+                    
+                    composeTo.innerHTML = '<option value="" disabled selected>Alıcı Seçin...</option>';
+                    allUsers.forEach(user => {
+                        if (user.id !== currentUser.id) { // Kendini listeden çıkar
+                            const option = new Option(user.name, user.id);
+                            composeTo.appendChild(option);
+                        }
+                    });
+                } catch (error) {
+                    console.error('Alıcılar çekilirken hata:', error);
+                    showToast('Alıcı listesi yüklenemedi.', true);
+                }
+            }
+            
             function startPolling() {
                 if (pollingIntervalId) clearInterval(pollingIntervalId);
+                messageList.innerHTML = ''; // Gelen kutusunu temizle
                 checkForMessages();
                 pollingIntervalId = setInterval(checkForMessages, POLLING_INTERVAL_MS);
             }
 
             async function checkForMessages() {
                 if (!currentUser) return;
-                pollingStatus.innerHTML = `<svg class="w-4 h-4 text-slate-400 animate-spin mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor" fill-rule="evenodd" opacity="0.2"></path><path d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z" fill="currentColor"></path></svg> Kontrol ediliyor...`;
+                pollingStatus.innerHTML = `<svg class="w-4 h-4 text-slate-400 animate-spin mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor" fill-rule="evenodd" opacity="0.2"></path><path d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z" fill="currentColor"></path></svg> Kontrol...`;
                 try {
                     const response = await fetch(`${API_URL}/messages/check/${currentUser.id}`);
                     if (!response.ok) throw new Error('Mesaj kontrol hatası');
@@ -194,15 +216,9 @@
             }
 
             function displayMessageInList(msg) {
-                const emptyMsgDiv = messageList.querySelector('div.text-center');
-                if (emptyMsgDiv) emptyMsgDiv.remove();
                 const div = document.createElement('div');
                 div.className = 'p-3 rounded-lg cursor-pointer hover:bg-indigo-50 border-b border-slate-200 border-l-4 border-transparent transition-colors duration-200';
-                div.innerHTML = `
-                    <div class="font-semibold text-slate-800">${msg.sender_name}</div>
-                    <div class="text-sm text-slate-600 truncate">${msg.subject}</div>
-                    <div class="text-xs text-slate-400 mt-1">${new Date(msg.timestamp).toLocaleString('tr-TR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}</div>
-                `;
+                div.innerHTML = `<div class="font-semibold text-slate-800">${msg.sender_name}</div><div class="text-sm text-slate-600 truncate">${msg.subject}</div><div class="text-xs text-slate-400 mt-1">${new Date(msg.timestamp).toLocaleString('tr-TR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}</div>`;
                 div.addEventListener('click', () => {
                     document.querySelectorAll('#message-list > div').forEach(el => el.classList.remove('selected-message'));
                     div.classList.add('selected-message');
@@ -212,45 +228,17 @@
             }
             
             function displayMessageContent(msg) {
-                messageView.innerHTML = `
-                    <div class="border-b border-slate-200 pb-4">
-                        <h2 class="text-2xl font-bold text-slate-900">${msg.subject}</h2>
-                        <div class="flex items-center justify-between mt-4">
-                            <p class="text-sm font-semibold text-slate-700">Kimden: <span class="font-normal">${msg.sender_name}</span></p>
-                            <p class="text-sm text-slate-500">${new Date(msg.timestamp).toLocaleString('tr-TR')}</p>
-                        </div>
-                    </div>
-                    <div class="mt-6 text-slate-800 whitespace-pre-wrap leading-relaxed">${msg.content}</div>
-                `;
+                messageView.innerHTML = `<div class="border-b border-slate-200 pb-4"><h2 class="text-2xl font-bold text-slate-900">${msg.subject}</h2><div class="flex items-center justify-between mt-4"><p class="text-sm font-semibold text-slate-700">Kimden: <span class="font-normal">${msg.sender_name}</span></p><p class="text-sm text-slate-500">${new Date(msg.timestamp).toLocaleString('tr-TR')}</p></div></div><div class="mt-6 text-slate-800 whitespace-pre-wrap leading-relaxed">${msg.content}</div>`;
             }
 
-            // DÜZELTME: Butonun devre dışı bırakılmasını ve geri bildirimini yöneten fonksiyon
             async function sendMessage(event) {
                 event.preventDefault();
-                
-                const messageData = {
-                    sender_id: currentUser.id,
-                    receiver_id: parseInt(composeTo.value),
-                    subject: document.getElementById('compose-subject').value,
-                    content: document.getElementById('compose-body').value
-                };
-
-                if (!messageData.receiver_id) {
-                    showToast('Lütfen bir alıcı seçin.', true);
-                    return;
-                }
-
-                // Butonu devre dışı bırak ve metni değiştir
+                const messageData = { sender_id: currentUser.id, receiver_id: parseInt(composeTo.value), subject: document.getElementById('compose-subject').value, content: document.getElementById('compose-body').value };
+                if (!messageData.receiver_id) { showToast('Lütfen bir alıcı seçin.', true); return; }
                 sendBtn.disabled = true;
                 sendBtn.querySelector('span').textContent = 'Gönderiliyor...';
-
                 try {
-                    const response = await fetch(`${API_URL}/messages`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(messageData)
-                    });
-
+                    const response = await fetch(`${API_URL}/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(messageData) });
                     if (response.ok) {
                         showToast('Mesaj başarıyla gönderildi!');
                         composeForm.reset();
@@ -262,19 +250,70 @@
                     console.error('Mesaj gönderilirken hata:', error);
                     showToast(`Mesaj gönderilemedi: ${error.message}`, true);
                 } finally {
-                    // İşlem bitince (hata olsa da olmasa da) butonu eski haline getir
                     sendBtn.disabled = false;
                     sendBtn.querySelector('span').textContent = 'Gönder';
                 }
             }
 
-            userSelect.addEventListener('change', (e) => {
-                handleUserLogin(e.target.value);
+            // --- Olay Dinleyicileri ---
+            showRegisterLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
             });
 
-            composeForm.addEventListener('submit', sendMessage);
+            showLoginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                registerForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+            });
 
-            populateUsers();
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                try {
+                    const response = await fetch(`${API_URL}/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: email })
+                    });
+                    if (!response.ok) {
+                        const err = await response.json();
+                        throw new Error(err.detail);
+                    }
+                    const user = await response.json();
+                    showToast(`Hoş geldin, ${user.name}!`);
+                    startApplication(user);
+                } catch (error) {
+                    showToast(error.message, true);
+                }
+            });
+
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                try {
+                    const response = await fetch(`${API_URL}/register`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, email })
+                    });
+                    if (!response.ok) {
+                        const err = await response.json();
+                        throw new Error(err.detail);
+                    }
+                    showToast('Kayıt başarılı! Lütfen giriş yapın.');
+                    registerForm.classList.add('hidden');
+                    loginForm.classList.remove('hidden');
+                    loginForm.reset();
+                    registerForm.reset();
+                } catch (error) {
+                    showToast(error.message, true);
+                }
+            });
+            
+            composeForm.addEventListener('submit', sendMessage);
         });
     </script>
 </body>
