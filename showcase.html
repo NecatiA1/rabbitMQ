@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeal Mail System - Professional Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --accent: #00ff88;
+            --accent-dim: #00cc6a;
+            --border: #333333;
+            --border-light: #2a2a2a;
+            --card-bg: #161616;
+            --code-bg: #0d1117;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 400;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 120px 0 80px;
+            text-align: left;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--card-bg);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dim);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-secondary);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            margin-bottom: 64px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 600px;
+        }
+
+        /* Features Grid */
+        .features {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
+            transition: border-color 0.2s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--text-muted);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            font-size: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            background: var(--bg-primary);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .tech-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .tech-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .tech-item h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .tech-item p {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        /* Code Section */
+        .code-section {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-container {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 32px;
+        }
+
+        .code-header {
+            background: var(--bg-tertiary);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #ff5f57; }
+        .code-dot.yellow { background: #ffbd2e; }
+        .code-dot.green { background: #28ca42; }
+
+        .code-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .code-content {
+            padding: 24px;
+            overflow-x: auto;
+        }
+
+        pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+
+        /* Demo Section */
+        .demo {
+            background: var(--bg-primary);
+        }
+
+        .demo-preview {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .demo-placeholder {
+            background: var(--bg-tertiary);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 64px 32px;
+            margin-bottom: 24px;
+        }
+
+        .demo-placeholder h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .demo-placeholder p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 80px 0 60px;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .features-grid,
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">ödeal/mail</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#tech">Stack</a></li>
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content fade-in">
+                    <div class="hero-badge">v1.0.0 • Production Ready</div>
+                    <h1>Enterprise Mail System</h1>
+                    <p>High-performance mail system built with FastAPI and RabbitMQ. Designed for scalability, reliability, and modern messaging requirements.</p>
+                    <div class="cta-group">
+                        <a href="#demo" class="btn btn-primary">View Demo</a>
+                        <a href="#tech" class="btn btn-secondary">Technical Details</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Core Features</h2>
+                    <p class="section-subtitle">Built with modern technologies for enterprise-grade performance and reliability</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>High Performance</h3>
+                        <p>Asynchronous FastAPI architecture ensures optimal response times and resource utilization</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📨</div>
+                        <h3>Message Queue</h3>
+                        <p>RabbitMQ integration provides reliable message delivery and queue management</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Secure</h3>
+                        <p>CORS protection and secure data transmission with comprehensive security measures</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏗️</div>
+                        <h3>Scalable</h3>
+                        <p>Microservice architecture designed to scale horizontally with growing demands</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔌</div>
+                        <h3>RESTful API</h3>
+                        <p>Clean, well-documented API endpoints for seamless integration and development</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👤</div>
+                        <h3>User Management</h3>
+                        <p>Efficient user data handling with JSON-based storage and quick retrieval</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tech" class="tech-stack">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Technology Stack</h2>
+                    <p class="section-subtitle">Modern, proven technologies for enterprise applications</p>
+                </div>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h4>FastAPI</h4>
+                        <p>High-performance Python framework</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>RabbitMQ</h4>
+                        <p>Message broker for async processing</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Pydantic</h4>
+                        <p>Data validation and serialization</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Uvicorn</h4>
+                        <p>ASGI web server implementation</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Tailwind CSS</h4>
+                        <p>Utility-first CSS framework</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>JavaScript</h4>
+                        <p>Modern ES6+ frontend logic</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="code-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Implementation</h2>
+                    <p class="section-subtitle">Clean, maintainable code with industry best practices</p>
+                </div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-dots">
+                            <div class="code-dot red"></div>
+                            <div class="code-dot yellow"></div>
+                            <div class="code-dot green"></div>
+                        </div>
+                        <div class="code-title">main.py</div>
+                    </div>
+                    <div class="code-content">
+                        <pre><code><span class="comment"># FastAPI Mail System</span>
+<span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI, HTTPException
+<span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel
+<span class="keyword">import</span> pika, json
+
+app = <span class="function">FastAPI</span>()
+
+<span class="keyword">class</span> <span class="function">Message</span>(BaseModel):
+    sender_id: <span class="keyword">int</span>
+    receiver_id: <span class="keyword">int</span>
+    subject: <span class="keyword">str</span>
+    content: <span class="keyword">str</span>
+
+<span class="keyword">@app.post</span>(<span class="string">"/messages"</span>)
+<span class="keyword">async def</span> <span class="function">send_message</span>(msg: Message):
+    queue_name = <span class="string">f"user_queue_{msg.receiver_id}"</span>
+    <span class="comment"># RabbitMQ message publishing logic</span>
+    <span class="keyword">return</span> {<span class="string">"status"</span>: <span class="string">"success"</span>}</code></pre>
+                    </div>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-dots">
+                            <div class="code-dot red"></div>
+                            <div class="code-dot yellow"></div>
+                            <div class="code-dot green"></div>
+                        </div>
+                        <div class="code-title">users.json</div>
+                    </div>
+                    <div class="code-content">
+                        <pre><code>[
+  {
+    <span class="string">"id"</span>: <span class="number">1</span>,
+    <span class="string">"name"</span>: <span class="string">"Semih Sarıçam"</span>,
+    <span class="string">"email"</span>: <span class="string">"semih.saricam@ode.al"</span>
+  },
+  {
+    <span class="string">"id"</span>: <span class="number">2</span>,
+    <span class="string">"name"</span>: <span class="string">"Necati Atlı"</span>,
+    <span class="string">"email"</span>: <span class="string">"necati.atli@ode.al"</span>
+  }
+]</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="demo" class="demo">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Live Demo</h2>
+                    <p class="section-subtitle">Interactive demonstration of the mail system interface</p>
+                </div>
+                <div class="demo-preview">
+                    <div class="demo-placeholder">
+                        <h3>Mail System Interface</h3>
+                        <p>Modern, responsive design with real-time messaging capabilities</p>
+                        <a href="index.html" class="btn btn-primary" target="_blank">Launch Demo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <div class="contact-content">
+                    <h2 class="section-title">Get In Touch</h2>
+                    <p class="section-subtitle">For technical inquiries or collaboration opportunities</p>
+                    <div class="cta-group" style="margin-top: 32px; justify-content: center;">
+                        <a href="mailto:semih.saricam@ode.al" class="btn btn-primary">Contact Developer</a>
+                        <a href="#tech" class="btn btn-secondary">Documentation</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Ödeal Mail System. Enterprise solution.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 0.6s ease-out';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
