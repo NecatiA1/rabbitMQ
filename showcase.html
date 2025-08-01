@@ -3,39 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ödeal Mail Sistemi - Proje Vitrin</title>
+    <title>Ödeal Mail System - Professional Showcase</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --accent: #00ff88;
+            --accent-dim: #00cc6a;
+            --border: #333333;
+            --border-light: #2a2a2a;
+            --card-bg: #161616;
+            --code-bg: #0d1117;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             line-height: 1.6;
-            color: #1a1a1a;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
 
         /* Header */
         header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             position: fixed;
-            width: 100%;
             top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
             z-index: 1000;
         }
 
@@ -43,288 +62,250 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
+            padding: 16px 0;
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #4f46e5;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent);
             text-decoration: none;
+            letter-spacing: -0.5px;
         }
 
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 32px;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: #374151;
-            font-weight: 500;
-            transition: color 0.3s ease;
+            color: var(--text-secondary);
+            font-weight: 400;
+            font-size: 14px;
+            transition: color 0.2s ease;
         }
 
         .nav-links a:hover {
-            color: #4f46e5;
+            color: var(--text-primary);
         }
 
         /* Hero Section */
         .hero {
             margin-top: 80px;
-            padding: 6rem 0;
-            text-align: center;
-            color: white;
+            padding: 120px 0 80px;
+            text-align: left;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--card-bg);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
         }
 
         .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2.5rem;
-            opacity: 0.9;
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.6;
             max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
-        .cta-buttons {
+        .cta-group {
             display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
         }
 
         .btn {
-            padding: 1rem 2rem;
+            padding: 12px 24px;
             border: none;
-            border-radius: 12px;
-            font-weight: 600;
+            border-radius: 6px;
+            font-weight: 500;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
+            gap: 8px;
+            transition: all 0.2s ease;
             cursor: pointer;
+            font-size: 14px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white;
-            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.3);
+            background: var(--accent);
+            color: var(--bg-primary);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(79, 70, 229, 0.4);
+            background: var(--accent-dim);
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+            border-color: var(--text-secondary);
         }
 
-        /* Features Section */
-        .features {
-            background: white;
-            padding: 6rem 0;
+        /* Section Styles */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            margin-bottom: 64px;
         }
 
         .section-title {
-            text-align: center;
-            margin-bottom: 4rem;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
         }
 
-        .section-title h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 1rem;
-        }
-
-        .section-title p {
-            font-size: 1.1rem;
-            color: #6b7280;
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
             max-width: 600px;
-            margin: 0 auto;
+        }
+
+        /* Features Grid */
+        .features {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
         }
 
         .feature-card {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            padding: 2.5rem;
-            border-radius: 20px;
-            text-align: center;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
+            transition: border-color 0.2s ease;
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--text-muted);
         }
 
         .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            border-radius: 15px;
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
-            color: white;
-            font-size: 1.5rem;
+            margin-bottom: 24px;
+            font-size: 20px;
         }
 
         .feature-card h3 {
-            font-size: 1.3rem;
+            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 1rem;
-            color: #1a1a1a;
+            margin-bottom: 12px;
         }
 
         .feature-card p {
-            color: #6b7280;
-            line-height: 1.6;
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
         }
 
-        /* Tech Stack Section */
+        /* Tech Stack */
         .tech-stack {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            padding: 6rem 0;
-            color: white;
+            background: var(--bg-primary);
         }
 
         .tech-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
         }
 
         .tech-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
             text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .tech-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-3px);
+            border-color: var(--accent);
+            transform: translateY(-2px);
         }
 
         .tech-item h4 {
-            font-size: 1.2rem;
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 8px;
         }
 
         .tech-item p {
-            opacity: 0.8;
-            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-size: 13px;
         }
 
-        /* Demo Section */
-        .demo {
-            background: white;
-            padding: 6rem 0;
-        }
-
-        .demo-preview {
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 2rem;
-            margin-top: 3rem;
-            border: 1px solid #e2e8f0;
-            text-align: center;
-        }
-
-        .demo-image {
-            width: 100%;
-            max-width: 800px;
-            height: 400px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-            margin: 0 auto;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .demo-image::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            bottom: 20px;
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-        }
-
-        /* Code Examples */
+        /* Code Section */
         .code-section {
-            background: #0f172a;
-            padding: 6rem 0;
-            color: white;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
 
         .code-container {
-            background: #1e293b;
-            border-radius: 15px;
-            padding: 2rem;
-            margin-top: 2rem;
-            border: 1px solid #334155;
-            overflow-x: auto;
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 32px;
         }
 
         .code-header {
+            background: var(--bg-tertiary);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #334155;
+            gap: 12px;
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
         }
 
         .code-dot {
@@ -333,34 +314,70 @@
             border-radius: 50%;
         }
 
-        .code-dot.red { background: #ef4444; }
-        .code-dot.yellow { background: #eab308; }
-        .code-dot.green { background: #22c55e; }
+        .code-dot.red { background: #ff5f57; }
+        .code-dot.yellow { background: #ffbd2e; }
+        .code-dot.green { background: #28ca42; }
 
         .code-title {
-            margin-left: 1rem;
-            font-weight: 500;
-            color: #94a3b8;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
         }
 
-        pre {
-            color: #e2e8f0;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.5;
+        .code-content {
+            padding: 24px;
             overflow-x: auto;
         }
 
-        .keyword { color: #c084fc; }
-        .string { color: #34d399; }
-        .comment { color: #6b7280; }
-        .function { color: #60a5fa; }
+        pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+
+        /* Demo Section */
+        .demo {
+            background: var(--bg-primary);
+        }
+
+        .demo-preview {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .demo-placeholder {
+            background: var(--bg-tertiary);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 64px 32px;
+            margin-bottom: 24px;
+        }
+
+        .demo-placeholder h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .demo-placeholder p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
 
         /* Contact Section */
         .contact {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 6rem 0;
-            color: white;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
             text-align: center;
         }
 
@@ -369,47 +386,45 @@
             margin: 0 auto;
         }
 
-        .contact h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-        }
-
-        .contact p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-        }
-
         /* Footer */
         footer {
-            background: #1a1a1a;
-            color: white;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
             text-align: center;
-            padding: 2rem 0;
         }
 
         footer p {
-            opacity: 0.8;
+            color: var(--text-muted);
+            font-size: 14px;
         }
 
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
+            .hero {
+                padding: 80px 0 60px;
+                text-align: center;
+            }
+
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 36px;
             }
 
             .hero p {
-                font-size: 1.1rem;
+                font-size: 16px;
             }
 
-            .cta-buttons {
+            .cta-group {
                 flex-direction: column;
-                align-items: center;
+                align-items: stretch;
             }
 
             .nav-links {
                 display: none;
+            }
+
+            .section-title {
+                font-size: 28px;
             }
 
             .features-grid,
@@ -419,271 +434,261 @@
         }
 
         /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease-out;
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
         }
 
-        /* Scroll behavior */
-        html {
-            scroll-behavior: smooth;
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <nav class="container">
-            <a href="#" class="logo">📧 Ödeal Mail</a>
+            <a href="#" class="logo">ödeal/mail</a>
             <ul class="nav-links">
-                <li><a href="#home">Ana Sayfa</a></li>
-                <li><a href="#features">Özellikler</a></li>
-                <li><a href="#tech">Teknoloji</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#tech">Stack</a></li>
                 <li><a href="#demo">Demo</a></li>
-                <li><a href="#contact">İletişim</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container">
-            <h1 class="fade-in-up">Ödeal Mail Sistemi</h1>
-            <p class="fade-in-up">FastAPI ve RabbitMQ ile geliştirilmiş modern, güvenli ve ölçeklenebilir mail sistemi. Gerçek zamanlı mesajlaşma deneyimi için tasarlandı.</p>
-            <div class="cta-buttons fade-in-up">
-                <a href="#demo" class="btn btn-primary">
-                    🚀 Demo İzle
-                </a>
-                <a href="#tech" class="btn btn-secondary">
-                    ⚙️ Teknik Detaylar
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <div class="container">
-            <div class="section-title">
-                <h2>Öne Çıkan Özellikler</h2>
-                <p>Modern web teknolojileri ile geliştirilmiş, kullanıcı dostu ve performanslı mail sistemi</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🚀</div>
-                    <h3>Yüksek Performans</h3>
-                    <p>FastAPI ile geliştirilmiş asenkron API yapısı sayesinde yüksek performans ve hızlı yanıt süreleri</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📨</div>
-                    <h3>Gerçek Zamanlı Mesajlaşma</h3>
-                    <p>RabbitMQ message broker kullanarak güvenilir ve gerçek zamanlı mesaj iletimi</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Güvenli Altyapı</h3>
-                    <p>CORS koruması ve güvenli veri aktarımı ile korumalı mail sistemi</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h3>Responsive Tasarım</h3>
-                    <p>Tailwind CSS ile geliştirilmiş, tüm cihazlarda mükemmel görüntü sağlayan responsive arayüz</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>RESTful API</h3>
-                    <p>Modern RESTful API yapısı ile kolay entegrasyon ve genişletilebilir mimari</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
-                    <h3>Kullanıcı Yönetimi</h3>
-                    <p>JSON tabanlı kullanıcı veri yapısı ile basit ve etkili kullanıcı yönetimi</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tech Stack Section -->
-    <section id="tech" class="tech-stack">
-        <div class="container">
-            <div class="section-title">
-                <h2>Teknoloji Yığını</h2>
-                <p>Modern ve güvenilir teknolojiler kullanılarak geliştirilmiştir</p>
-            </div>
-            <div class="tech-grid">
-                <div class="tech-item">
-                    <h4>🐍 FastAPI</h4>
-                    <p>Yüksek performanslı Python web framework'ü ile RESTful API geliştirme</p>
-                </div>
-                <div class="tech-item">
-                    <h4>🐰 RabbitMQ</h4>
-                    <p>Güvenilir mesaj kuyruğu sistemi ile asenkron mesaj işleme</p>
-                </div>
-                <div class="tech-item">
-                    <h4>🎨 Tailwind CSS</h4>
-                    <p>Modern ve responsive kullanıcı arayüzü tasarımı</p>
-                </div>
-                <div class="tech-item">
-                    <h4>📄 Pydantic</h4>
-                    <p>Veri doğrulama ve serileştirme için type-safe modeller</p>
-                </div>
-                <div class="tech-item">
-                    <h4>🔧 Uvicorn</h4>
-                    <p>ASGI uyumlu yüksek performanslı web sunucusu</p>
-                </div>
-                <div class="tech-item">
-                    <h4>🌐 CORS</h4>
-                    <p>Cross-Origin Resource Sharing desteği ile güvenli API erişimi</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Demo Section -->
-    <section id="demo" class="demo">
-        <div class="container">
-            <div class="section-title">
-                <h2>Canlı Demo</h2>
-                <p>Mail sisteminin çalışır halini görmek için aşağıdaki demo'yu inceleyebilirsiniz</p>
-            </div>
-            <div class="demo-preview">
-                <div class="demo-image">
-                    <div>
-                        <h3>📧 Ödeal Mail Arayüzü</h3>
-                        <p>Modern ve kullanıcı dostu tasarım</p>
-                        <div style="margin-top: 2rem;">
-                            <a href="index.html" class="btn btn-primary" target="_blank">
-                                🖥️ Demo'yu Aç
-                            </a>
-                        </div>
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content fade-in">
+                    <div class="hero-badge">v1.0.0 • Production Ready</div>
+                    <h1>Enterprise Mail System</h1>
+                    <p>High-performance mail system built with FastAPI and RabbitMQ. Designed for scalability, reliability, and modern messaging requirements.</p>
+                    <div class="cta-group">
+                        <a href="#demo" class="btn btn-primary">View Demo</a>
+                        <a href="#tech" class="btn btn-secondary">Technical Details</a>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Code Examples Section -->
-    <section class="code-section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Kod Örnekleri</h2>
-                <p>Projenin temel yapısını gösteren kod örnekleri</p>
-            </div>
-            
-            <div class="code-container">
-                <div class="code-header">
-                    <div class="code-dot red"></div>
-                    <div class="code-dot yellow"></div>
-                    <div class="code-dot green"></div>
-                    <div class="code-title">main.py - API Endpoints</div>
+        <section id="features" class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Core Features</h2>
+                    <p class="section-subtitle">Built with modern technologies for enterprise-grade performance and reliability</p>
                 </div>
-                <pre><code><span class="comment"># FastAPI ile Mail API'si</span>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>High Performance</h3>
+                        <p>Asynchronous FastAPI architecture ensures optimal response times and resource utilization</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📨</div>
+                        <h3>Message Queue</h3>
+                        <p>RabbitMQ integration provides reliable message delivery and queue management</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Secure</h3>
+                        <p>CORS protection and secure data transmission with comprehensive security measures</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏗️</div>
+                        <h3>Scalable</h3>
+                        <p>Microservice architecture designed to scale horizontally with growing demands</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔌</div>
+                        <h3>RESTful API</h3>
+                        <p>Clean, well-documented API endpoints for seamless integration and development</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👤</div>
+                        <h3>User Management</h3>
+                        <p>Efficient user data handling with JSON-based storage and quick retrieval</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tech" class="tech-stack">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Technology Stack</h2>
+                    <p class="section-subtitle">Modern, proven technologies for enterprise applications</p>
+                </div>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h4>FastAPI</h4>
+                        <p>High-performance Python framework</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>RabbitMQ</h4>
+                        <p>Message broker for async processing</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Pydantic</h4>
+                        <p>Data validation and serialization</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Uvicorn</h4>
+                        <p>ASGI web server implementation</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Tailwind CSS</h4>
+                        <p>Utility-first CSS framework</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>JavaScript</h4>
+                        <p>Modern ES6+ frontend logic</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="code-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Implementation</h2>
+                    <p class="section-subtitle">Clean, maintainable code with industry best practices</p>
+                </div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-dots">
+                            <div class="code-dot red"></div>
+                            <div class="code-dot yellow"></div>
+                            <div class="code-dot green"></div>
+                        </div>
+                        <div class="code-title">main.py</div>
+                    </div>
+                    <div class="code-content">
+                        <pre><code><span class="comment"># FastAPI Mail System</span>
 <span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI, HTTPException
 <span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel
+<span class="keyword">import</span> pika, json
 
 app = <span class="function">FastAPI</span>()
 
 <span class="keyword">class</span> <span class="function">Message</span>(BaseModel):
-    sender_id: int
-    receiver_id: int
-    subject: str
-    content: str
+    sender_id: <span class="keyword">int</span>
+    receiver_id: <span class="keyword">int</span>
+    subject: <span class="keyword">str</span>
+    content: <span class="keyword">str</span>
 
 <span class="keyword">@app.post</span>(<span class="string">"/messages"</span>)
-<span class="keyword">def</span> <span class="function">send_message</span>(msg: Message):
-    <span class="comment"># RabbitMQ ile mesaj gönderme</span>
-    receiver_queue_name = <span class="string">f"user_queue_{msg.receiver_id}"</span>
-    <span class="keyword">return</span> {<span class="string">"status"</span>: <span class="string">"Mesaj başarıyla gönderildi."</span>}</code></pre>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">
-                    <div class="code-dot red"></div>
-                    <div class="code-dot yellow"></div>
-                    <div class="code-dot green"></div>
-                    <div class="code-title">kullanicilar.json - Veri Yapısı</div>
+<span class="keyword">async def</span> <span class="function">send_message</span>(msg: Message):
+    queue_name = <span class="string">f"user_queue_{msg.receiver_id}"</span>
+    <span class="comment"># RabbitMQ message publishing logic</span>
+    <span class="keyword">return</span> {<span class="string">"status"</span>: <span class="string">"success"</span>}</code></pre>
+                    </div>
                 </div>
-                <pre><code>[
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-dots">
+                            <div class="code-dot red"></div>
+                            <div class="code-dot yellow"></div>
+                            <div class="code-dot green"></div>
+                        </div>
+                        <div class="code-title">users.json</div>
+                    </div>
+                    <div class="code-content">
+                        <pre><code>[
   {
-    <span class="string">"id"</span>: 1,
+    <span class="string">"id"</span>: <span class="number">1</span>,
     <span class="string">"name"</span>: <span class="string">"Semih Sarıçam"</span>,
     <span class="string">"email"</span>: <span class="string">"semih.saricam@ode.al"</span>
   },
   {
-    <span class="string">"id"</span>: 2,
+    <span class="string">"id"</span>: <span class="number">2</span>,
     <span class="string">"name"</span>: <span class="string">"Necati Atlı"</span>,
     <span class="string">"email"</span>: <span class="string">"necati.atli@ode.al"</span>
   }
 ]</code></pre>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="contact-content">
-                <h2>İletişim</h2>
-                <p>Bu proje hakkında daha fazla bilgi almak veya iş birliği önerileri için iletişime geçebilirsiniz.</p>
-                <div class="cta-buttons">
-                    <a href="mailto:semih.saricam@ode.al" class="btn btn-primary">
-                        📧 E-posta Gönder
-                    </a>
-                    <a href="#" class="btn btn-secondary">
-                        💼 LinkedIn
-                    </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
+        <section id="demo" class="demo">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Live Demo</h2>
+                    <p class="section-subtitle">Interactive demonstration of the mail system interface</p>
+                </div>
+                <div class="demo-preview">
+                    <div class="demo-placeholder">
+                        <h3>Mail System Interface</h3>
+                        <p>Modern, responsive design with real-time messaging capabilities</p>
+                        <a href="index.html" class="btn btn-primary" target="_blank">Launch Demo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <div class="contact-content">
+                    <h2 class="section-title">Get In Touch</h2>
+                    <p class="section-subtitle">For technical inquiries or collaboration opportunities</p>
+                    <div class="cta-group" style="margin-top: 32px; justify-content: center;">
+                        <a href="mailto:semih.saricam@ode.al" class="btn btn-primary">Contact Developer</a>
+                        <a href="#tech" class="btn btn-secondary">Documentation</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
     <footer>
         <div class="container">
-            <p>&copy; 2024 Ödeal Mail Sistemi. Tüm hakları saklıdır.</p>
+            <p>&copy; 2024 Ödeal Mail System. Enterprise solution.</p>
         </div>
     </footer>
 
     <script>
-        // Smooth scrolling for navigation links
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         });
 
-        // Add animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
+        // Intersection Observer for animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.animation = 'fadeInUp 0.8s ease-out';
+                    entry.target.style.animation = 'fadeIn 0.6s ease-out';
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
-        // Observe all sections
         document.querySelectorAll('section').forEach(section => {
             observer.observe(section);
         });
