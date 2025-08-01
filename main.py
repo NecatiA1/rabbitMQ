@@ -36,7 +36,8 @@ app.add_middleware(
 )
 
 # --- RabbitMQ Ayarları ---
-RABBITMQ_URL = os.environ.get('CLOUDAMQP_URL', 'amqp://guest:guest@localhost:5672')
+RABBITMQ_URL ='amqp://guest:guest@localhost:5672'
+
 url_params = pika.URLParameters(RABBITMQ_URL)
 
 # --- Başlangıç Verisi ---
